@@ -1,0 +1,87 @@
+const cardList = [
+  {
+    id: 1,
+    topic: "Web Design",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Без статуса",
+  },
+  {
+    id: 2,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Нужно сделать",
+  },
+  {
+    id: 3,
+    topic: "Web Design",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Без статуса",
+  },
+  {
+    id: 4,
+    topic: "Copywriting",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Без статуса",
+  },
+  {
+    id: 5,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Без статуса",
+  },
+  {
+    id: 6,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Без статуса",
+  },
+  {
+    id: 7,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "В работе",
+  },
+  {
+    id: 8,
+    topic: "Copywriting",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "В работе",
+  },
+  {
+    id: 9,
+    topic: "Web Design",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "В работе",
+  },
+  {
+    id: 10,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Тестирование",
+  },
+  {
+    id: 11,
+    topic: "Reserch",
+    title: "Название задачи",
+    date: "30.10.2023",
+    status: "Готово",
+  },
+];
+export const statusList = [
+  { status: "Без статуса", id: 1 },
+  { status: "Нужно сделать", id: 2 },
+  { status: "В работе", id: 3 },
+  { status: "Тестирование", id: 4 },
+  { status: "Готово", id: 5 },
+];
+export default cardList;
