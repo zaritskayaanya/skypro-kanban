@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-const PopNewCard = ({ addNewCard, cards = [] }) => {
+const PopNewCard = ({
+  addNewCard,
+  cards = [],
+  setIsPopNewCardOpen,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -10,61 +14,49 @@ const PopNewCard = ({ addNewCard, cards = [] }) => {
   });
 
   const [pendingCard, setPendingCard] = useState(null);
+  const closePopNewCard = () => {
+    setIsPopNewCardOpen(false)
+  }
 
   useEffect(() => {
     if (pendingCard) {
       setIsLoading(true);
-      
+
       const timer = setTimeout(() => {
         addNewCard(pendingCard);
         setPendingCard(null);
         setIsLoading(false);
-        // Сброс формы
+        setIsPopNewCardOpen(false);
+
         setFormData({
-          title: '',
-          topic: 'Web Design',
-          date: new Date().toLocaleDateString('ru-RU'),
-          status: 'Тестирование'
+          title: "",
+          topic: "Web Design",
+          date: new Date().toLocaleDateString("ru-RU"),
+          status: "Тестирование",
         });
-      }, 1500); // Имитация задержки 1.5 секунды
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [pendingCard, addNewCard]);
+  }, [pendingCard, addNewCard, setIsPopNewCardOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const getNewCard = () => {
-  //   const maxId =
-  //     cards.length > 0 ? Math.max(...cards.map((card) => card.id)) : 0;
-
-  //   const newCard = {
-  //     id: maxId + 1,
-  //     topic: "Web Design",
-  //     title: "Название задачи",
-  //     date: "30.10.2023",
-  //     status: "Тестирование",
-  //   };
-  //   addNewCard(newCard);
-  //   console.log(cardList);
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const maxId =
       cards.length > 0 ? Math.max(...cards.map((card) => card.id)) : 0;
-      setPendingCard({
-        id: maxId + 1,
-        ...formData
-      });
-    }
-    
+    setPendingCard({
+      id: maxId + 1,
+      ...formData,
+    });
+  };
+
   return (
-    
     <div className="pop-new-card" id="popNewCard">
       {isLoading && (
         <div className="loading-indicator">
@@ -76,7 +68,7 @@ const PopNewCard = ({ addNewCard, cards = [] }) => {
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">
             <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#" className="pop-new-card__close">
+            <a href="#" onClick={closePopNewCard} className="pop-new-card__close">
               &#10006;
             </a>
             <div className="pop-new-card__wrap">
@@ -229,7 +221,7 @@ const PopNewCard = ({ addNewCard, cards = [] }) => {
               </div>
             </div>
             <button
-            onClick={handleSubmit}
+              onClick={handleSubmit}
               type="submit"
               className="form-new__create _hover01"
               id="btnCreate"
