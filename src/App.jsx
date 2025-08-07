@@ -1,5 +1,4 @@
 import "./App.css";
-import "../public/assets/logo.png";
 import Header from "./components/Header/Header";
 import PopNewCard from "./components/PopNewCard/PopNewCard";
 import PopBrowse from "./components/PopBrowse/PopBrowse";
@@ -49,7 +48,7 @@ function App() {
         </main>
       </div>
 
-      <script src="js/script.js"></script>
+      <script type="module" src="/src/main.jsx"></script>
     </>
   );
 }
