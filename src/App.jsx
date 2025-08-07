@@ -1,5 +1,4 @@
 import "./App.css";
-import logo from "../public/assets/logo.png";
 import Header from "./components/Header/Header";
 import PopNewCard from "./components/PopNewCard/PopNewCard";
 import PopBrowse from "./components/PopBrowse/PopBrowse";
