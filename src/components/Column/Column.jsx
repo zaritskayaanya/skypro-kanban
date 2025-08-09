@@ -1,24 +1,25 @@
-import React from "react";
 import Card from "../Card/Card";
+import { ColumnCard, ColumnTitle, MainColumn } from "./StyledColumn";
 
 const Column = ({ status, cards }) => {
   return (
-    <div className="main__column">
-      <div className="column__title">
+    <MainColumn>
+      <ColumnTitle>
         <p>{status}</p>
-      </div>
-      <div className="cards">
-        {cards.map((card) => (
-          <Card
-            key={card.id}
-            date={card.date}
-            title={card.title}
-            topic={card.topic}
-          />
-        ))}
-      </div>
-    </div>
+      </ColumnTitle>
+      <ColumnCard>
+        {cards.map((card) => {
+          return (
+            <Card
+              date={card.date}
+              title={card.title}
+              topic={card.topic}
+              key={card.id}
+            />
+          );
+        })}
+      </ColumnCard>
+    </MainColumn>
   );
 };
-
 export default Column;

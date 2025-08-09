@@ -1,11 +1,12 @@
 import "./App.css";
 import Header from "./components/Header/Header";
-import PopNewCard from "./components/PopNewCard/PopNewCard";
 import PopBrowse from "./components/PopBrowse/PopBrowse";
 import PopExit from "./components/PopExit/PopExit";
 import { useEffect, useState } from "react";
 import cardList, { statusList } from "../data";
 import Column from "./components/Column/Column";
+import { Container, MainBlock, MainContent, Wrapper } from "./SApp";
+import { GlobalStyles } from "./GlobalStyles";
 
 function App() {
   const [cards, setCards] = useState(cardList);
@@ -17,22 +18,30 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 1500);
   }, [loading]);
 
   return (
     <>
-      <div className="wrapper">
+    <GlobalStyles/>
+      <Wrapper>
         <PopExit />
-
         <PopBrowse />
         <Header addNewCard={addNewCard} cards={cards} />
-        <main className="main">
-          <div className="container">
-            <div className="main__block">
-              <div className="main__content">
+        <main>
+          <Container>
+            <MainBlock>
+              <MainContent>
                 {loading ? (
-                  <p style={{ textAlign: "center", width: '100%', fontSize: '24px'}}>Данные загружаются...</p>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      fontSize: "24px",
+                    }}
+                  >
+                    Данные загружаются...
+                  </p>
                 ) : (
                   statusList.map((item) => (
                     <Column
@@ -42,11 +51,11 @@ function App() {
                     />
                   ))
                 )}
-              </div>
-            </div>
-          </div>
+              </MainContent>
+            </MainBlock>
+          </Container>
         </main>
-      </div>
+      </Wrapper>
 
       <script type="module" src="/src/main.jsx"></script>
     </>

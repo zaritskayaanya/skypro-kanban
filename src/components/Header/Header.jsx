@@ -1,6 +1,15 @@
 import { useState } from "react";
 import ModalWin from "../ModalWin/ModalWin";
 import PopNewCard from "../PopNewCard/PopNewCard";
+import {
+  HeaderBlock,
+  HeaderBtnMainNew,
+  HeaderContainer,
+  HeaderLogo,
+  HeaderNav,
+  HeaderUser,
+  SHeader,
+} from "./SHeader";
 
 const Header = ({ addNewCard, cards }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,30 +22,26 @@ const Header = ({ addNewCard, cards }) => {
   };
 
   return (
-    <header className="header">
-      <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
+    <SHeader>
+      <HeaderContainer>
+        <HeaderBlock>
+          <HeaderLogo>
             <a href="" target="_self">
-              <img src="/assets/logo.png" alt="logo" />
+              <img src="./assets/logo.png" alt="logo" />
             </a>
-          </div>
-          <div className="header__logo _dark">
+          </HeaderLogo>
+          <HeaderLogo>
             <a href="" target="_self">
-              <img src="/assets/logo_dark.png" alt="logo" />
+              <img src="./assets/logo_dark.png" alt="logo" />
             </a>
-          </div>
-          <nav className="header__nav">
-            <button
-              onClick={openPopNewCard}
-              className="header__btn-main-new _hover01"
-              id="btnMainNew"
-            >
+          </HeaderLogo>
+          <HeaderNav>
+            <HeaderBtnMainNew onClick={openPopNewCard} id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
-            </button>
-            <span onClick={toggleModal} className="header__user _hover02">
+            </HeaderBtnMainNew>
+            <HeaderUser onClick={toggleModal}>
               Ivan Ivanov
-            </span>
+            </HeaderUser>
             {isModalOpen && <ModalWin />}
             {isPopNewCardOpen && (
               <PopNewCard
@@ -46,10 +51,10 @@ const Header = ({ addNewCard, cards }) => {
                 setIsPopNewCardOpen={setIsPopNewCardOpen}
               />
             )}
-          </nav>
-        </div>
-      </div>
-    </header>
+          </HeaderNav>
+        </HeaderBlock>
+      </HeaderContainer>
+    </SHeader>
   );
 };
 
