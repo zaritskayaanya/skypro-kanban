@@ -13,4 +13,5 @@ const ModalWin = () => {
     </div>
   );
 };
+
 export default ModalWin;
