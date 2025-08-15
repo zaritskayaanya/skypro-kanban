@@ -1,3 +1,4 @@
+import "./App.css";
 import Header from "./components/Header/Header";
 import PopBrowse from "./components/PopBrowse/PopBrowse";
 import PopExit from "./components/PopExit/PopExit";
@@ -56,7 +57,7 @@ function App() {
         </main>
       </Wrapper>
 
-      <script type="module" src="/src/main.jsx"></script>
+      <script src="js/script.js"></script>
     </>
   );
 }
