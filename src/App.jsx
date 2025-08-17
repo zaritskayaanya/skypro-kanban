@@ -57,7 +57,7 @@ function App() {
         </main>
       </Wrapper>
 
-      <script src="js/script.js"></script>
+      <script type="module" src="/src/main.jsx"></script>
     </>
   );
 }
