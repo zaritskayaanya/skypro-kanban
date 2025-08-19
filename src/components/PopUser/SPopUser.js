@@ -1,10 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const HeaderPopUserSet = styled.div`
+export const PopUserWrapper = styled.div`
   display: block;
   position: absolute;
   top: 61px;
   right: 0;
+  z-index: 10;
   width: 213px;
   height: 205px;
   border-radius: 10px;
@@ -13,31 +14,9 @@ export const HeaderPopUserSet = styled.div`
   box-shadow: 0px 10px 39px 0px rgba(26, 56, 101, 0.21);
   padding: 34px;
   text-align: center;
-  z-index: 2;
-  &:target {
-    display: block;
-  }
-  & button {
-    width: 72px;
-    height: 30px;
-    background: transparent;
-    color: #565eef;
-    border-radius: 4px;
-    border: 1px solid #565eef;
-    &:hover {
-      background-color: #33399b;
-      color: #ffffff;
-    }
-  }
-  & a {
-    color: #565eef;
-    &:hover {
-      color: #ffffff;
-    }
-  }
 `;
 
-export const PopUserSetName = styled.p`
+export const PopUserName = styled.p`
   color: #000;
   font-size: 14px;
   font-weight: 500;
@@ -45,7 +24,8 @@ export const PopUserSetName = styled.p`
   letter-spacing: -0.14px;
   margin-bottom: 4px;
 `;
-export const PopUserSetMail = styled.p`
+
+export const PopUserMail = styled.p`
   color: #94a6be;
   font-size: 14px;
   line-height: 21px;
@@ -53,18 +33,20 @@ export const PopUserSetMail = styled.p`
   margin-bottom: 10px;
 `;
 
-export const PopUserSetTheme = styled.div`
+export const PopUserTheme = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
-  & p {
+
+  p {
     color: #000;
     font-size: 14px;
     line-height: 21px;
     letter-spacing: -0.14px;
   }
-  & input[type="checkbox"] {
+
+  input[type='checkbox'] {
     position: relative;
     width: 24px;
     height: 13px;
@@ -74,12 +56,9 @@ export const PopUserSetTheme = styled.div`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    cursor: pointer;
-    transition: background 0.3s ease;
 
-    /* Псевдоэлемент для переключателя */
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 1px;
       left: 1px;
@@ -87,17 +66,33 @@ export const PopUserSetTheme = styled.div`
       height: 11px;
       border-radius: 50%;
       background-color: #94a6be;
-      transition: all 0.3s ease;
+      transition: 0.5s;
     }
 
-    /* Стили для checked состояния */
-    &:checked {
-      background: #565eef;
+    &:checked::before {
+      left: 12px;
+    }
+  }
+`;
 
-      &::before {
-        left: 12px;
-        background-color: #ffffff;
-      }
+export const PopUserButton = styled.button`
+  width: 72px;
+  height: 30px;
+  background: transparent;
+  color: #565eef;
+  border-radius: 4px;
+  border: 1px solid #565eef;
+
+  a {
+    color: #565eef;
+  }
+
+  &:hover {
+    background-color: #33399b;
+    color: #ffffff;
+
+    a {
+      color: #ffffff;
     }
   }
 `;

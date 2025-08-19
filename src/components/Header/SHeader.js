@@ -1,20 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const SHeader = styled.header`
+export const HeaderWrapper = styled.header`
   width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
-`;
-
-export const HeaderContainer = styled.div`
-  max-width: 1260px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 30px;
-  @media screen and (max-width: 495px) {
-    width: 100%;
-    padding: 0 16px;
-  }
 `;
 
 export const HeaderBlock = styled.div`
@@ -30,7 +19,7 @@ export const HeaderBlock = styled.div`
 `;
 
 export const HeaderLogo = styled.div`
-  & img {
+  img {
     width: 85px;
   }
 `;
@@ -43,7 +32,7 @@ export const HeaderNav = styled.nav`
   justify-content: center;
 `;
 
-export const HeaderBtnMainNew = styled.button`
+export const HeaderButtonNew = styled.button`
   width: 178px;
   height: 30px;
   border-radius: 4px;
@@ -54,23 +43,20 @@ export const HeaderBtnMainNew = styled.button`
   line-height: 1;
   font-weight: 500;
   margin-right: 20px;
-  & a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
     color: #ffffff;
   }
-  @media screen and (max-width: 495px) {
-    z-index: 3;
-    position: fixed;
-    left: 16px;
-    bottom: 30px;
-    top: auto;
-    width: calc(100vw - 32px);
-    height: 40px;
-    border-radius: 4px;
-    margin-right: 0;
+
+  &:hover {
+    background-color: #33399b;
   }
 `;
 
-export const HeaderUser = styled.span`
+export const HeaderUser = styled.a`
   height: 20px;
   display: flex;
   flex-wrap: nowrap;
@@ -79,15 +65,9 @@ export const HeaderUser = styled.span`
   font-size: 14px;
   line-height: 20px;
   color: #565eef;
-  cursor: pointer;
-  user-select: none;
-
-  &:hover {
-    color: #33399b;
-  }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 6px;
     height: 6px;
@@ -97,11 +77,14 @@ export const HeaderUser = styled.span`
     transform: rotate(-45deg);
     margin: -6px 0 0 5px;
     padding: 0;
-    transition: border-color 0.2s ease; 
   }
 
-  &:hover::after {
-    border-left-color: #33399b;
-    border-bottom-color: #33399b;
+  &:hover {
+    color: #33399b;
+
+    &::after {
+      border-left-color: #33399b;
+      border-bottom-color: #33399b;
+    }
   }
 `;

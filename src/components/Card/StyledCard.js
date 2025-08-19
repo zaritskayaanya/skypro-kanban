@@ -1,13 +1,26 @@
-import styled from "styled-components";
+import styled, { css } from 'styled-components';
 
-export const StyledCard = styled.div`
+const themeStyles = {
+  webDesign: css`
+    background-color: #ffe4c2;
+    color: #ff6d00;
+  `,
+  research: css`
+    background-color: #b4fdd1;
+    color: #06b16e;
+  `,
+  copywriting: css`
+    background-color: #e9d4ff;
+    color: #9a48f1;
+  `,
+};
+
+export const CardItem = styled.div`
   padding: 5px;
-  animation-name: card-animation;
-  animation-duration: 500ms;
-  animation-timing-function: linear;
+  animation: card-animation 500ms linear;
 `;
 
-export const CardsCard = styled.div`
+export const CardWrapper = styled.div`
   width: 220px;
   height: 130px;
   background-color: #ffffff;
@@ -17,6 +30,18 @@ export const CardsCard = styled.div`
   align-items: flex-start;
   justify-content: stretch;
   padding: 15px 13px 19px;
+
+  @media screen and (max-width: 1200px) {
+    width: 220px;
+    height: 130px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: stretch;
+    padding: 15px 13px 19px;
+  }
 `;
 
 export const CardGroup = styled.div`
@@ -33,45 +58,25 @@ export const CardTheme = styled.div`
   height: 20px;
   padding: 5px 14px;
   border-radius: 18px;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 10px;
-  & p {
-    color: ${({ $topic }) => {
-      switch ($topic) {
-        case "Web Design":
-          return "#FF6D00";
-        case "Reserch":
-          return "#06B16E";
-        case "Copywriting":
-          return "#9A48F1";
-        default:
-          return "#FFFFFF";
-      }
-    }};
+
+  ${({ theme }) => themeStyles[theme] || themeStyles.webDesign}
+
+  p {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 10px;
   }
-  background-color: ${({ $topic }) => {
-    switch ($topic) {
-      case "Web Design":
-        return "#FFE4C2";
-      case "Reserch":
-        return "#B4FDD1";
-      case "Copywriting":
-        return "#E9D4FF";
-      default:
-        return "#94A6BE";
-    }
-  }};
 `;
 
-export const CardBtn = styled.div`
+export const CardButton = styled.a`
   width: 24px;
   height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 2px;
-  & div {
+
+  div {
     width: 4px;
     height: 4px;
     border-radius: 50%;
@@ -85,26 +90,30 @@ export const CardContent = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  & h3 {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 18px;
-    color: #000000;
-    margin-bottom: 10px;
-  }
 `;
+
+export const CardTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #000000;
+  margin-bottom: 10px;
+`;
+
 export const CardDate = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  & p {
+
+  svg {
+    width: 13px;
+  }
+
+  p {
     margin-left: 6px;
     font-size: 10px;
     line-height: 13px;
     color: #94a6be;
     letter-spacing: 0.2px;
-  }
-  & svg {
-    width: 13px;
   }
 `;
