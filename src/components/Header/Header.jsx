@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PopUser from '../Popups/PopUser';
+import PopUser from '../PopUser/PopUser';
 import {
   HeaderWrapper,
   HeaderBlock,

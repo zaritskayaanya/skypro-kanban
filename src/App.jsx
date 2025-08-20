@@ -1,8 +1,8 @@
 import Header from './components/Header/Header';
-import Main from './components/Main/main';
+import Main from './components/Main/Main';
 import PopExit from './components/PopExit/PopExit';
-import PopNewCard from './components/PopExit/PopNewCard';
-import PopBrowse from './components/PopExit/PopBrowse';
+import PopNewCard from './components/PopNewCard/PopNewCard';
+import PopBrowse from './components/PopBrowse/PopBrowse';
 import { GlobalStyles } from './styles/GlobalStyles'; 
 
 function App() {

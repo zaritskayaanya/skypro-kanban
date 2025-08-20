@@ -1,7 +1,7 @@
 import Column from '../Column/Column';
 import { cardList } from '../../data';
 import { useState, useEffect } from 'react';
-import { MainWrapper, MainBlock, MainContent, LoadingContainer } from './Smain';
+import { MainWrapper, MainBlock, MainContent, LoadingContainer } from './SMain';
 
 export default function Main() {
   const statuses = ['Без статуса', 'Нужно сделать', 'В работе', 'Тестирование', 'Готово'];
