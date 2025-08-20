@@ -1,5 +1,5 @@
 import Column from '../Column/Column';
-import { cardList } from '../../data';
+import { cardList } from '../../../data';
 import { useState, useEffect } from 'react';
 import { MainWrapper, MainBlock, MainContent, LoadingContainer } from './SMain';
 
