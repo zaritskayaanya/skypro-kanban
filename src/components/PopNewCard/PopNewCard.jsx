@@ -9,7 +9,7 @@ export default function PopNewCard({ isOpen = false, onClose = () => {} }) {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', onKey);
-    // блокируем скролл фона, когда открыта модалка
+
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 

@@ -6,6 +6,7 @@ import PopNewCard from './components/PopNewCard/PopNewCard';
 import PopBrowse from './components/PopBrowse/PopBrowse';
 import { GlobalStyles } from './styles/GlobalStyles';
 
+
 function App() {
   const [isNewOpen, setIsNewOpen] = useState(false);
 

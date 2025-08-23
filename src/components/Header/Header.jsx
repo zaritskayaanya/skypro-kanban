@@ -22,12 +22,12 @@ export default function Header() {
         <HeaderBlock>
           <HeaderLogo className="_show _light">
             <a href="" target="_self">
-              <img src="../public/images/logo.png" alt="logo" />
+              <img src="../public/assets/logo.png" alt="logo" />
             </a>
           </HeaderLogo>
           <HeaderLogo className="_dark">
             <a href="" target="_self">
-              <img src="../public/images/logo_dark.png" alt="logo" />
+              <img src="../public/assets/logo_dark.png" alt="logo" />
             </a>
           </HeaderLogo>
           <HeaderNav>
