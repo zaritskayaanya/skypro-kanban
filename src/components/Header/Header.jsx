@@ -1,56 +1,52 @@
-import { useState } from "react";
-import ModalWin from "../ModalWin/ModalWin";
-import PopNewCard from "../PopNewCard/PopNewCard";
+import { useState } from 'react';
+import PopUser from '../PopUser/PopUser';
+import {
+  HeaderWrapper,
+  HeaderBlock,
+  HeaderLogo,
+  HeaderNav,
+  HeaderButtonNew,
+  HeaderUser,
+} from './SHeader';
 
-const Header = ({ addNewCard, cards }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPopNewCardOpen, setIsPopNewCardOpen] = useState(false);
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-  const openPopNewCard = () => {
-    setIsPopNewCardOpen(true);
+export default function Header() {
+  const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
+
+  const toggleUserPopup = () => {
+    setIsUserPopupOpen(!isUserPopupOpen);
   };
 
   return (
-    <header className="header">
+    <HeaderWrapper className="header">
       <div className="container">
-        <div className="header__block">
-          <div className="header__logo _show _light">
+        <HeaderBlock>
+          <HeaderLogo className="_show _light">
             <a href="" target="_self">
-              <img src="/assets/logo.png" alt="logo" />
+              <img src="../public/assets/logo.png" alt="logo" />
             </a>
-          </div>
-          <div className="header__logo _dark">
+          </HeaderLogo>
+          <HeaderLogo className="_dark">
             <a href="" target="_self">
-              <img src="/assets/logo_dark.png" alt="logo" />
+              <img src="../public/assets/logo_dark.png" alt="logo" />
             </a>
-          </div>
-          <nav className="header__nav">
-            <button
-              onClick={openPopNewCard}
-              className="header__btn-main-new _hover01"
-              id="btnMainNew"
-            >
+          </HeaderLogo>
+          <HeaderNav>
+            <HeaderButtonNew id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
-            </button>
-            <span onClick={toggleModal} className="header__user _hover02">
+            </HeaderButtonNew>
+            <HeaderUser
+              href="#user-set-target"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleUserPopup();
+              }}
+            >
               Ivan Ivanov
-            </span>
-            {isModalOpen && <ModalWin />}
-            {isPopNewCardOpen && (
-              <PopNewCard
-                addNewCard={addNewCard}
-                cards={cards}
-                isPopNewCardOpen={isPopNewCardOpen}
-                setIsPopNewCardOpen={setIsPopNewCardOpen}
-              />
-            )}
-          </nav>
-        </div>
+            </HeaderUser>
+            {isUserPopupOpen && <PopUser onClose={toggleUserPopup} />}
+          </HeaderNav>
+        </HeaderBlock>
       </div>
-    </header>
+    </HeaderWrapper>
   );
-};
-
-export default Header;
+}

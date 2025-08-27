@@ -1,54 +1,26 @@
-import "./App.css";
-import Header from "./components/Header/Header";
-import PopNewCard from "./components/PopNewCard/PopNewCard";
-import PopBrowse from "./components/PopBrowse/PopBrowse";
-import PopExit from "./components/PopExit/PopExit";
-import { useEffect, useState } from "react";
-import cardList, { statusList } from "../data";
-import Column from "./components/Column/Column";
+import { useState } from 'react';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import PopExit from './components/PopExit/PopExit';
+import PopNewCard from './components/PopNewCard/PopNewCard';
+import PopBrowse from './components/PopBrowse/PopBrowse';
+import { GlobalStyles } from './styles/GlobalStyles';
+
 
 function App() {
-  const [cards, setCards] = useState(cardList);
-  const addNewCard = (newCard) => {
-    setCards((prev) => [...prev, newCard]);
-  };
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, [loading]);
+  const [isNewOpen, setIsNewOpen] = useState(false);
 
   return (
     <>
+      <GlobalStyles />
       <div className="wrapper">
         <PopExit />
-
+        <PopNewCard isOpen={isNewOpen} onClose={() => setIsNewOpen(false)} />
         <PopBrowse />
-        <Header addNewCard={addNewCard} cards={cards} />
-        <main className="main">
-          <div className="container">
-            <div className="main__block">
-              <div className="main__content">
-                {loading ? (
-                  <p style={{ textAlign: "center", width: '100%', fontSize: '24px'}}>Данные загружаются...</p>
-                ) : (
-                  statusList.map((item) => (
-                    <Column
-                      key={item.id}
-                      status={item.status}
-                      cards={cards.filter((el) => el.status === item.status)}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </main>
+        <Header />
+        <Main openNew={() => setIsNewOpen(true)} />
+        <button onClick={() => setIsNewOpen(true)}>Создать задачу</button>
       </div>
-
-      <script type="module" src="/src/main.jsx"></script>
     </>
   );
 }
