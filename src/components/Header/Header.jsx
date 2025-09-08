@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PopUser from '../PopUser/PopUser';
 import {
   HeaderWrapper,
@@ -9,41 +10,60 @@ import {
   HeaderUser,
 } from './SHeader';
 
-export default function Header() {
+export default function Header({ onOpenNew, onOpenExit, onOpenBrowse, user }) {
   const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
 
-  const toggleUserPopup = () => {
-    setIsUserPopupOpen(!isUserPopupOpen);
-  };
+  const toggleUserPopup = () => setIsUserPopupOpen((s) => !s);
+  const closeUserPopup = () => setIsUserPopupOpen(false);
+
+  const userId = 'user-set-target';
 
   return (
     <HeaderWrapper className="header">
       <div className="container">
         <HeaderBlock>
           <HeaderLogo className="_show _light">
-            <a href="" target="_self">
-              <img src="../public/assets/logo.png" alt="logo" />
-            </a>
+            <Link to="/">
+              <img src="/assets/logo.png" alt="logo" />
+            </Link>
           </HeaderLogo>
+
           <HeaderLogo className="_dark">
-            <a href="" target="_self">
-              <img src="../public/assets/logo_dark.png" alt="logo" />
-            </a>
+            <Link to="/">
+              <img src="/assets/logo_dark.png" alt="logo" />
+            </Link>
           </HeaderLogo>
+
           <HeaderNav>
-            <HeaderButtonNew id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
-            </HeaderButtonNew>
-            <HeaderUser
-              href="#user-set-target"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleUserPopup();
-              }}
+            <HeaderButtonNew
+              id="btnMainNew"
+              type="button"
+              onClick={() => onOpenNew?.()}
             >
-              Ivan Ivanov
+              Создать новую задачу
+            </HeaderButtonNew>
+
+            {/* Рендерим HeaderUser как button (через `as="button"`). 
+                Если ваш styled-component не поддерживает `as`, замените на <button className="..."> */}
+            <HeaderUser
+              as="button"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={isUserPopupOpen}
+              aria-controls={userId}
+              onClick={toggleUserPopup}
+            >
+              {user?.name ?? 'Пользователь'}
             </HeaderUser>
-            {isUserPopupOpen && <PopUser onClose={toggleUserPopup} />}
+
+            {isUserPopupOpen && (
+              <PopUser
+                id={userId}
+                onClose={closeUserPopup}
+                onOpenExit={onOpenExit} // пробрасываем из App напрямую
+                user={user}
+              />
+            )}
           </HeaderNav>
         </HeaderBlock>
       </div>

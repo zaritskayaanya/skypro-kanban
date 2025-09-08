@@ -1,5 +1,6 @@
+// src/App.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import PopExit from './components/PopExit/PopExit';
@@ -9,22 +10,27 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import AppRoutes from './routes/AppRoutes';
 import { useAuth } from './context/AuthContext';
 
-
 function App() {
-  const [isNewOpen, setIsNewOpen] = useState(false);
   const [isExitOpen, setIsExitOpen] = useState(false);
   const [isBrowseOpen, setIsBrowseOpen] = useState(false);
 
   const auth = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const openNew = () => setIsNewOpen(true);
-  const closeNew = () => setIsNewOpen(false);
+  const openNew = () => {
+    // навигация на маршрут - AppRoutes должен содержать /tasks/new
+    navigate('/tasks/new');
+  };
+  const closeNew = () => navigate(-1);
 
-  const openExit = () => setIsExitOpen(true);
+  const openExit = () => {
+    // diagnostic log (remove in prod if not needed)
+    // console.log('App: openExit called');
+    setIsExitOpen(true);
+  };
   const closeExit = () => setIsExitOpen(false);
   const confirmExit = () => {
-    // Выполнить выход и перенаправить на страницу входа
     auth.logout();
     closeExit();
     navigate('/login', { replace: true });
@@ -33,20 +39,27 @@ function App() {
   const openBrowse = () => setIsBrowseOpen(true);
   const closeBrowse = () => setIsBrowseOpen(false);
 
+  const isNewRoute = location.pathname === '/tasks/new';
+
   return (
     <>
       <GlobalStyles />
       <div className="wrapper">
         <PopExit isOpen={isExitOpen} onClose={closeExit} onConfirm={confirmExit} />
-        <PopNewCard isOpen={isNewOpen} onClose={closeNew} />
+        <PopNewCard isOpen={isNewRoute} onClose={closeNew} />
         <PopBrowse isOpen={isBrowseOpen} onClose={closeBrowse} />
-        <Header onOpenNew={openNew}
+
+        <Header
+          onOpenNew={openNew}
           onOpenExit={openExit}
           onOpenBrowse={openBrowse}
-          user={auth.user}/>
+          user={auth.user}
+        />
+
         <Main>
           <AppRoutes />
         </Main>
+
         <button className="fab-create" onClick={openNew}>
           Создать задачу
         </button>

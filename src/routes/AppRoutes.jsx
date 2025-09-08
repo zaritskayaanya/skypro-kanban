@@ -11,11 +11,15 @@ import ProtectedRoute from './ProtectedRoute';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-export default function AppRoutes() {
+export default function AppRoutes({ onOpenLogout }) {
   const [isLogoutOpen, setLogoutOpen] = useState(false);
   const auth = useAuth();
 
-  const openLogout = () => setLogoutOpen(true);
+  const openLogout = () => {
+    setLogoutOpen(true);
+    // если нужно, пробросьте открытие в Header через callback:
+    if (typeof onOpenLogout === 'function') onOpenLogout();
+  };
   const closeLogout = () => setLogoutOpen(false);
   const confirmLogout = () => {
     auth.logout();
@@ -32,7 +36,7 @@ export default function AppRoutes() {
         <Route path="/register" element={<Register />} />
 
         <Route
-          path="/tasks/add"
+          path="/tasks/new"
           element={
             <ProtectedRoute>
               <TaskAdd />
@@ -62,13 +66,12 @@ export default function AppRoutes() {
             <ProtectedRoute>
               <div>
                 <h1>Выйти</h1>
-                <p>Если вы видите эту страницу, почините UI: рекомендую открывать LogoutModal из шапки.</p>
+                <p>Если вы видите эту страницу, лучше открыть LogoutModal из шапки.</p>
               </div>
             </ProtectedRoute>
           }
         />
 
-        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
