@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
@@ -10,12 +10,21 @@ import NotFound from '../pages/NotFound';
 import ProtectedRoute from './ProtectedRoute';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import Modal from '../components/Modal/Modal';
 
-export default function AppRoutes() {
+export default function AppRoutes({ onOpenLogout }) {
   const [isLogoutOpen, setLogoutOpen] = useState(false);
   const auth = useAuth();
 
-  const openLogout = () => setLogoutOpen(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const background = location.state && location.state.background;
+  console.log('AppRoutes: location=', location, ' background=', background);
+  const openLogout = () => {
+    setLogoutOpen(true);
+    if (typeof onOpenLogout === 'function') onOpenLogout();
+  };
   const closeLogout = () => setLogoutOpen(false);
   const confirmLogout = () => {
     auth.logout();
@@ -26,19 +35,20 @@ export default function AppRoutes() {
     <>
       <LogoutModal open={isLogoutOpen} onClose={closeLogout} onConfirm={confirmLogout} />
 
-      <Routes>
+      <Routes location={background || location}>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         <Route
-          path="/tasks/add"
+          path="/tasks/new"
           element={
             <ProtectedRoute>
               <TaskAdd />
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/tasks/:id/edit"
           element={
@@ -47,6 +57,7 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/tasks/:id"
           element={
@@ -62,15 +73,40 @@ export default function AppRoutes() {
             <ProtectedRoute>
               <div>
                 <h1>Выйти</h1>
-                <p>Если вы видите эту страницу, почините UI: рекомендую открывать LogoutModal из шапки.</p>
+                <p>Если вы видите эту страницу, лучше открыть LogoutModal из шапки.</p>
               </div>
             </ProtectedRoute>
           }
         />
 
-        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {background && (
+        <Routes>
+          <Route
+            path="/tasks/new"
+            element={
+              <ProtectedRoute>
+                <Modal onClose={() => navigate(-1)}>
+                  <TaskAdd isModal />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tasks/:id/edit"
+            element={
+              <ProtectedRoute>
+                <Modal onClose={() => navigate(-1)}>
+                  <TaskEdit isModal />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </>
   );
 }

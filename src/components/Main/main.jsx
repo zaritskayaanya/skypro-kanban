@@ -1,36 +1,28 @@
-import Column from '../Column/Column';
-import { cardList } from '../../../data';
-import { useState, useEffect } from 'react';
-import { MainWrapper, MainBlock, MainContent, LoadingContainer } from './SMain';
+import Column from "../Column/Column";
+import { SContainer } from "../Header/Header.styled";
+import { SMain, MainBlock, MainContent } from "./Main.styled";
 
-export default function Main() {
-  const statuses = ['Без статуса', 'Нужно сделать', 'В работе', 'Тестирование', 'Готово'];
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
+const Main = ({ loading }) => {
+  const columnTitles = [
+    "Без статуса",
+    "Нужно сделать",
+    "В работе",
+    "Тестирование",
+    "Готово",
+  ];
   return (
-    <MainWrapper className="main">
-      <div className="container">
+    <SMain>
+      <SContainer>
         <MainBlock>
-          {isLoading ? (
-            <LoadingContainer>Данные загружаются...</LoadingContainer>
-          ) : (
-            <MainContent>
-              {statuses.map((status) => (
-                <Column key={status} title={status} cards={cardList.filter((card) => card.status === status)} />
-              ))}
-            </MainContent>
-          )}
+          <MainContent>
+            {columnTitles.map((title, index) => (
+              <Column loading={loading} key={index} title={title} />
+            ))}
+          </MainContent>
         </MainBlock>
-      </div>
-    </MainWrapper>
+      </SContainer>
+    </SMain>
   );
-}
+};
+
+export default Main;

@@ -1,145 +1,81 @@
 import styled from 'styled-components';
 
 export const PopExitWrapper = styled.div`
-  display: none;
-  width: 100%;
-  height: 100%;
-  min-width: 320px;
-  min-height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-
-  &:target {
-    display: block;
-  }
+  width: 360px;
+  max-width: calc(100% - 32px);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 40px rgba(26, 56, 101, 0.22);
+  border: 1px solid rgba(148, 166, 190, 0.35);
+  padding: 20px;
+  box-sizing: border-box;
+  color: #0b1a3a;
 `;
 
 export const PopExitContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  padding: 0 16px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
 `;
 
 export const PopExitBlock = styled.div`
-  display: block;
-  margin: 0 auto;
-  background-color: #ffffff;
-  max-width: 370px;
   width: 100%;
-  padding: 50px 60px;
-  border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
-  box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
-
-  @media only screen and (max-width: 375px) {
-    padding: 50px 20px;
-  }
+  padding: 8px 12px;
 `;
 
 export const PopExitTitle = styled.div`
+  text-align: center;
   h2 {
-    text-align: center;
+    margin: 0;
     font-size: 20px;
-    font-weight: 700;
-    line-height: 30px;
-    letter-spacing: -0.4px;
-    margin-bottom: 20px;
+    line-height: 1.2;
+    color: #161b2e;
+    font-weight: 600;
   }
 `;
 
 export const PopExitForm = styled.form`
-  width: 100%;
+  margin-top: 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
 
-  @media only screen and (max-width: 375px) {
-    display: block;
+  @media (max-width: 420px) {
+    flex-direction: column;
+    gap: 10px;
   }
 `;
 
 export const PopExitButtonYes = styled.button`
-  width: 153px;
-  height: 30px;
-  background-color: #565eef;
-  border-radius: 4px;
-  border: none;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  line-height: 21px;
-  font-weight: 500;
-  letter-spacing: -0.14px;
+  min-width: 140px;
+  height: 40px;
+  background: #565eef;
   color: #ffffff;
-  margin-right: 10px;
-
-  a {
-    width: 100%;
-    height: 100%;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
 
   &:hover {
-    background-color: #33399b;
-  }
-
-  @media only screen and (max-width: 375px) {
-    width: 100%;
-    height: 40px;
-    margin-right: 0;
-    margin-bottom: 10px;
+    background: #3f46c9;
   }
 `;
 
 export const PopExitButtonNo = styled.button`
-  width: 153px;
-  height: 30px;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 0.7px solid #565eef;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  line-height: 21px;
-  font-weight: 500;
-  letter-spacing: -0.14px;
+  min-width: 140px;
+  height: 40px;
+  background: transparent;
   color: #565eef;
-
-  a {
-    width: 100%;
-    height: 100%;
-    color: #565eef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  border: 1px solid rgba(86, 94, 239, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
 
   &:hover {
-    background-color: #33399b;
-    color: #ffffff;
-
-    a {
-      color: #ffffff;
-    }
-  }
-
-  @media only screen and (max-width: 375px) {
-    width: 100%;
-    height: 40px;
+    background: #f2f4ff;
   }
 `;

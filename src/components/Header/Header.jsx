@@ -1,52 +1,46 @@
-import { useState } from 'react';
-import PopUser from '../PopUser/PopUser';
+import { Link } from "react-router-dom";
+import Button from "../Button/Button";
+import PopUser from "../PopUser/PopUser";
 import {
-  HeaderWrapper,
+  Dark,
+  SHeader,
+  SContainer,
   HeaderBlock,
   HeaderLogo,
   HeaderNav,
-  HeaderButtonNew,
+  Img,
   HeaderUser,
-} from './SHeader';
+} from "./Header.styled";
 
-export default function Header() {
-  const [isUserPopupOpen, setIsUserPopupOpen] = useState(false);
-
-  const toggleUserPopup = () => {
-    setIsUserPopupOpen(!isUserPopupOpen);
-  };
-
+const Header = ({ isModalOpen, toggleModal }) => {
   return (
-    <HeaderWrapper className="header">
-      <div className="container">
+    <SHeader>
+      <SContainer>
         <HeaderBlock>
-          <HeaderLogo className="_show _light">
+          <HeaderLogo>
             <a href="" target="_self">
-              <img src="../public/assets/logo.png" alt="logo" />
+              <Img src="../images/logo.png" alt="logo" />
             </a>
           </HeaderLogo>
-          <HeaderLogo className="_dark">
-            <a href="" target="_self">
-              <img src="../public/assets/logo_dark.png" alt="logo" />
-            </a>
+          <HeaderLogo>
+            <Dark>
+              <a href="" target="_self">
+                <Img src="../images/logo_dark.png" alt="logo" />
+              </a>
+            </Dark>
           </HeaderLogo>
           <HeaderNav>
-            <HeaderButtonNew id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
-            </HeaderButtonNew>
-            <HeaderUser
-              href="#user-set-target"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleUserPopup();
-              }}
-            >
-              Ivan Ivanov
-            </HeaderUser>
-            {isUserPopupOpen && <PopUser onClose={toggleUserPopup} />}
+            <Link to="/card/add">
+              {" "}
+              <Button text="Создать новую задачу" />
+            </Link>
+            <HeaderUser onClick={toggleModal}>Ivan Ivanov</HeaderUser>
+            {isModalOpen ? <PopUser isModalOpen={isModalOpen} /> : null}
           </HeaderNav>
         </HeaderBlock>
-      </div>
-    </HeaderWrapper>
+      </SContainer>
+    </SHeader>
   );
-}
+};
+
+export default Header;
