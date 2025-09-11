@@ -1,38 +1,31 @@
+import { Link } from "react-router-dom";
 import {
-  PopUserWrapper,
-  PopUserName,
-  PopUserMail,
-  PopUserTheme,
-  PopUserButton,
-} from './SPopUser';
+  Checkbox,
+  HeaderPopUserSet,
+  PopUserSetA,
+  PopUserSetButton,
+  PopUserSetmail,
+  PopUserSetName,
+  PopUserSetTheme,
+  PopUserSetThemeP,
+} from "./PopUser.styled";
 
-export default function PopUser({ onClose }) {
+const PopUser = () => {
   return (
-    <PopUserWrapper id="user-set-target">
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          onClose();
-        }}
-      >
-        x
-      </a>
-      <PopUserName>Ivan Ivanov</PopUserName>
-      <PopUserMail>ivan.ivanov@gmail.com</PopUserMail>
-      <PopUserTheme>
-        <p>Темная тема</p>
-        <input type="checkbox" name="checkbox" />
-      </PopUserTheme>
-      <PopUserButton
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          onClose();
-        }}
-      >
-        <a href="#popExit">Выйти</a>
-      </PopUserButton>
-    </PopUserWrapper>
+    <HeaderPopUserSet>
+      <PopUserSetName>Ivan Ivanov</PopUserSetName>
+      <PopUserSetmail>ivan.ivanov@gmail.com</PopUserSetmail>
+      <PopUserSetTheme>
+        <PopUserSetThemeP>Темная тема</PopUserSetThemeP>
+        <Checkbox type="checkbox" name="checkbox" />
+      </PopUserSetTheme>
+      <Link to="/exit">
+        <PopUserSetButton type="button">
+          <PopUserSetA>Выйти</PopUserSetA>
+        </PopUserSetButton>
+      </Link>
+    </HeaderPopUserSet>
   );
-}
+};
+
+export default PopUser;

@@ -1,19 +1,26 @@
-import Card from '../Card/Card';
-import { ColumnWrapper, ColumnTitle, CardsContainer } from './StyledColumn';
-
-export default function Column({ title, cards }) {
-  const filteredCards = cards.filter((card) => card.status === title);
-
+import { cardList } from "../../mock/data";
+import Card from "../Card/Card";
+import CardLoader from "../CardLoader/CardLoader";
+import { Cards, ColumnTitle, MainColumn, PTitle } from "./Column.styled";
+const Column = ({ title, loading }) => {
   return (
-    <ColumnWrapper className="column">
+    <MainColumn>
       <ColumnTitle>
-        <p>{title}</p>
+        <PTitle>{title}</PTitle>
       </ColumnTitle>
-      <CardsContainer className="cards">
-        {filteredCards.map((card) => (
-          <Card key={card.id} cardData={card} />
-        ))}
-      </CardsContainer>
-    </ColumnWrapper>
+      <Cards>
+        {cardList
+          .filter((card) => card.status === title)
+          .map((card) =>
+            loading ? (
+              <CardLoader key={card.id} />
+            ) : (
+              <Card card={card} key={card.id} />
+            )
+          )}
+      </Cards>
+    </MainColumn>
   );
-}
+};
+
+export default Column;
