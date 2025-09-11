@@ -1,112 +1,46 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import TaskAdd from '../pages/TaskAdd';
-import TaskEdit from '../pages/TaskEdit';
-import TaskView from '../pages/TaskView';
-import LogoutModal from '../pages/LogoutModal';
-import NotFound from '../pages/NotFound';
-import ProtectedRoute from './ProtectedRoute';
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import Modal from '../components/Modal/Modal';
+import "../../App.css";
+import { Route, Routes } from "react-router-dom";
+import { useState } from "react";
 
-export default function AppRoutes({ onOpenLogout }) {
-  const [isLogoutOpen, setLogoutOpen] = useState(false);
-  const auth = useAuth();
+import NotFoundPage from "../../pages/NotFoundPage";
+import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
+import NewCardPage from "../../pages/NewCardPage";
+import ExitPage from "../../pages/ExitPage";
+import LoginPage from "../../pages/LoginPage";
+import RegistrPage from "../../pages/RegistrPage";
+import MainPage from "../../pages/MainPage";
+import AuthForm from "../AuthForm/AuthRorm";
+import CardPage from "../../pages/CardPage";
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const background = location.state && location.state.background;
-  console.log('AppRoutes: location=', location, ' background=', background);
-  const openLogout = () => {
-    setLogoutOpen(true);
-    if (typeof onOpenLogout === 'function') onOpenLogout();
-  };
-  const closeLogout = () => setLogoutOpen(false);
-  const confirmLogout = () => {
-    auth.logout();
-    closeLogout();
-  };
+function AppRoutes() {
+  const [isAuth, setIsAuth] = useState(false);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+  // }, []);
 
   return (
-    <>
-      <LogoutModal open={isLogoutOpen} onClose={closeLogout} onConfirm={confirmLogout} />
-
-      <Routes location={background || location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-
-        <Route
-          path="/tasks/new"
-          element={
-            <ProtectedRoute>
-              <TaskAdd />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/tasks/:id/edit"
-          element={
-            <ProtectedRoute>
-              <TaskEdit />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/tasks/:id"
-          element={
-            <ProtectedRoute>
-              <TaskView />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/logout"
-          element={
-            <ProtectedRoute>
-              <div>
-                <h1>Выйти</h1>
-                <p>Если вы видите эту страницу, лучше открыть LogoutModal из шапки.</p>
-              </div>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
-      {background && (
-        <Routes>
-          <Route
-            path="/tasks/new"
-            element={
-              <ProtectedRoute>
-                <Modal onClose={() => navigate(-1)}>
-                  <TaskAdd isModal />
-                </Modal>
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/tasks/:id/edit"
-            element={
-              <ProtectedRoute>
-                <Modal onClose={() => navigate(-1)}>
-                  <TaskEdit isModal />
-                </Modal>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      )}
-    </>
+    <Routes>
+      <Route element={<PrivateRoute isAuth={isAuth} />}>
+        <Route path="/" element={<MainPage />}>
+          <Route path="/card/add" element={<NewCardPage />} />
+          <Route path="/card/:id" element={<CardPage />} />
+          <Route path="/exit" element={<ExitPage setIsAuth={setIsAuth} />} />
+        </Route>
+      </Route>
+      <Route
+        path="/sign-in"
+        element={<AuthForm isSignUp={false} setIsAuth={setIsAuth} />}
+      />
+      <Route
+        path="/sign-up"
+        element={<AuthForm isSignUp={true} setIsAuth={setIsAuth} />}
+      />
+      <Route path="/*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
+
+export default AppRoutes;
