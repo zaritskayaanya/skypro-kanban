@@ -1,175 +1,61 @@
-import { Link, useNavigate } from "react-router-dom";
-import Input from "../Input/Input";
-import {
-  FTitle,
-  Modal,
-  Bg,
-  FWrapper,
-  Form,
-  InputWrapper,
-  FormGroupP,
-  FormGroupPLink,
-} from "./AuthForm.styled";
-import BaseButton from "../BaseButton/BaseButton";
-import { useState } from "react";
-import { signIn, signUp } from "../../services/auth";
-import { ErrorP } from "../Input/Input.styled";
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
-const AuthForm = ({ isSignUp, setIsAuth }) => {
-  const navigate = useNavigate();
+export default function AuthForm() {
+  const { signIn, signUp, loadingAuth, error } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [login, setLogin] = useState('');
+  const [name, setName] = useState(''); // для регистрации
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
-  // состояние полей
-  const [formData, setFormData] = useState({
-    name: "",
-    login: "",
-    password: "",
-  });
-
-  // состояние ошибок
-  const [errors, setErrors] = useState({
-    name: "",
-    login: "",
-    password: "",
-  });
-
-  // состояние текста ошибки, чтобы показать её пользователю
-  const [error, setError] = useState("");
-
-  // функция валидации
-  const validateForm = () => {
-    const newErrors = { name: "", login: "", password: "" };
-    let isValid = true;
-
-    if (isSignUp && !formData.name.trim()) {
-      newErrors.name = true;
-      setError(
-        "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку."
-      );
-      isValid = false;
-    }
-
-    if (!formData.login.trim()) {
-      newErrors.login = true;
-      setError(
-        "Введенные вами данные не корректны. Чтобы завершить регистрацию, введите данные корректно и повторите попытку."
-      );
-      isValid = false;
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = true;
-      setError(
-        "Введенные вами данные не корректны. Чтобы завершить регистрацию, заполните все поля в форме."
-      );
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  // функция, которая отслеживает в полях изменения
-  // и меняет состояние компонента
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    setErrors({ ...errors, [name]: false });
-    setError("");
-  };
-
-  // функция отправки формы
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      // если у нас форма не прошла валидацию, то дальше не продолжаем
-      return;
-    }
+    setMessage(null);
     try {
-      // чтобы не писать две разных функции, выберем нужный запрос через
-      // тернарный оператор
-      const data = !isSignUp
-        ? await signIn({ login: formData.login, password: formData.password })
-        : await signUp(formData);
-
-      if (data) {
-        setIsAuth(true);
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        navigate("/");
+      if (isSignUp) {
+        await signUp({ name, login, password });
+        setMessage('Регистрация выполнена. Вы вошли в систему.');
+      } else {
+        await signIn({ login, password });
+        setMessage('Вы успешно вошли.');
       }
     } catch (err) {
-      setError(err.message);
+      setMessage(err.message || 'Ошибка');
     }
   };
 
   return (
-    <Bg>
-      <Modal>
-        <FWrapper>
-          <FTitle>{isSignUp ? "Регистрация" : "Вход"}</FTitle>
-          <Form id="form" onSubmit={handleSubmit}>
-            <InputWrapper>
-              {isSignUp && (
-                <Input
-                  error={errors.name}
-                  type="text"
-                  name="name"
-                  id="formname"
-                  placeholder="Имя"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              )}
-              <Input
-                error={errors.login}
-                type="text"
-                name="login"
-                id="formlogin"
-                placeholder="Эл. почта"
-                value={formData.login}
-                onChange={handleChange}
-              />
-              <Input
-                error={errors.password}
-                type="password"
-                name="password"
-                id="formpassword"
-                placeholder="Пароль"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </InputWrapper>
-            <ErrorP>{error}</ErrorP>
-            <BaseButton
-              onClick={handleSubmit}
-              type="submit"
-              text={isSignUp ? "Зарегистрироваться" : "Войти"}
-            />
-            {!isSignUp && (
-              <FormGroupP>
-                <p>Нужно зарегистрироваться?</p>
-                <Link to="/sign-up">
-                  <FormGroupPLink>Регистрируйтесь здесь</FormGroupPLink>
-                </Link>
-              </FormGroupP>
-            )}
-            {isSignUp && (
-              <FormGroupP>
-                <p>
-                  Уже есть аккаунт?{" "}
-                  <Link to="/sign-in">
-                    <FormGroupPLink>Войдите здесь</FormGroupPLink>
-                  </Link>
-                </p>
-              </FormGroupP>
-            )}
-          </Form>
-        </FWrapper>
-      </Modal>
-    </Bg>
-  );
-};
+    <div style={{ maxWidth: 420, margin: '0 auto' }}>
+      <h2>{isSignUp ? 'Регистрация' : 'Вход'}</h2>
+      <form onSubmit={handleSubmit}>
+        {isSignUp && (
+          <div>
+            <label>Имя</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+        )}
+        <div>
+          <label>Login</label>
+          <input value={login} onChange={(e) => setLogin(e.target.value)} required />
+        </div>
+        <div>
+          <label>Пароль</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        </div>
+        <button type="submit" disabled={loadingAuth}>
+          {isSignUp ? 'Зарегистрироваться' : 'Войти'}
+        </button>
+      </form>
 
-export default AuthForm;
+      <div style={{ marginTop: 12 }}>
+        <button onClick={() => setIsSignUp((s) => !s)} type="button">
+          {isSignUp ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
+        </button>
+      </div>
+
+      {message && <p>{message}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+    </div>
+  );
+}

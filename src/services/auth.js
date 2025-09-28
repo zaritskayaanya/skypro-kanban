@@ -1,34 +1,34 @@
-import axios from "axios";
+import api, { setApiToken } from './api';
 
-const API_URL = 'https://wedev-api.sky.pro/api/user';
+function getErrorMessage(error) {
+  return error?.response?.data?.error || error?.response?.data?.message || error?.message || 'Неизвестная ошибка';
+}
 
-export async function signIn(userData) {
-    try {
-        const data = await axios.post(API_URL + "/login", userData, {
-            headers: {
-                "Content-Type": "",
-            },
-        });
-        return data.data.user;
-    } catch (error) {
-        throw new Error(error.response.data.error);
-    }
+export async function signIn({ login, password }) {
+  try {
+    const body = new URLSearchParams();
+    body.append('login', login);
+    body.append('password', password);
+
+    const res = await api.post('/user/login', body);
+    return res.data; 
+  } catch (e) {
+    throw new Error(getErrorMessage(e));
+  }
 }
 
 export async function signUp({ name, login, password }) {
-    try {
-        const data = await axios.post(
-            API_URL,
-            { login, name, password },
-            {
-                headers: {
-                    "Content-Type": "",
-                },
-            }
-        );
-        return data.data.user;
-    } catch (error) {
-        console.log(error);
-        throw new Error(error.response.data.error);
-    }
+  try {
+    const body = new URLSearchParams();
+    body.append('login', login);
+    body.append('name', name);
+    body.append('password', password);
+
+    const res = await api.post('/user', body);
+    return res.data;
+  } catch (e) {
+    throw new Error(getErrorMessage(e));
+  }
 }
+
+export { setApiToken };
