@@ -1,6 +1,6 @@
 import "../../App.css";
 import { Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
@@ -14,17 +14,17 @@ import CardPage from "../../pages/CardPage";
 
 function AppRoutes() {
   const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+  // }, []);
 
   return (
     <Routes>
       <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage loading={loading} />}>
+        <Route path="/" element={<MainPage />}>
           <Route path="/card/add" element={<NewCardPage />} />
           <Route path="/card/:id" element={<CardPage />} />
           <Route path="/exit" element={<ExitPage setIsAuth={setIsAuth} />} />

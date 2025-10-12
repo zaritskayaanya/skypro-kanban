@@ -34,4 +34,3 @@ export const Cards = styled.div`
     overflow-y: auto;
   }
 `;
-

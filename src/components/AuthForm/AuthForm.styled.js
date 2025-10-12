@@ -8,6 +8,7 @@ export const Bg = styled.div`
   bottom: 0;
   background: rgba(234, 238, 246, 1);
 `;
+
 export const Modal = styled.div`
   width: 100%;
   height: 100%;
