@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://wedev-api.sky.pro/api/kanban';
+const API_URL = 'https://wedev-api.sky.pro/api/kanban/';
 export async function fetchTasks({ token }) {
     try {
         const data = await axios.get(API_URL, {
@@ -22,7 +22,7 @@ export async function postTask({ token, task }) {
         const data = await axios.post(API_URL, task, {
             headers: {
                 Authorization: 'Bearer ' + token,
-                'Content-Type': 'text/html',
+                "Content-Type": "",
             },
         })
         return data.data.tasks
@@ -33,12 +33,12 @@ export async function postTask({ token, task }) {
 
 // Функция изменения задачи:
 
-export async function editTask({ token, id, task }) {
+export async function redactTask({ token, _id, task }) {
     try {
-        const data = await axios.patch(API_URL + id, task, {
+        const data = await axios.put(API_URL + _id, task, {
             headers: {
                 Authorization: 'Bearer ' + token,
-                'Content-Type': 'text/html',
+                'Content-Type': '',
             },
         })
         return data.data.tasks
@@ -49,12 +49,12 @@ export async function editTask({ token, id, task }) {
 
 // Функция удаления задачи:
 
-export async function deleteTask({ token, id }) {
+export async function deleteTask({ token, _id, task }) {
     try {
-        const data = await axios.delete(API_URL + id, {
+        const data = await axios.delete(API_URL + _id, task,  {
             headers: {
                 Authorization: 'Bearer ' + token,
-                'Content-Type': 'text/html',
+                'Content-Type': '',
             },
         })
         return data.data.tasks

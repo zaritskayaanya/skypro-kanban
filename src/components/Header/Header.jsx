@@ -11,8 +11,12 @@ import {
   Img,
   HeaderUser,
 } from "./Header.styled";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Header = ({ isModalOpen, toggleModal }) => {
+  const { user } = useContext(AuthContext);
+
   return (
     <SHeader>
       <SContainer>
@@ -34,7 +38,7 @@ const Header = ({ isModalOpen, toggleModal }) => {
               {" "}
               <Button text="Создать новую задачу" />
             </Link>
-            <HeaderUser onClick={toggleModal}>Ivan Ivanov</HeaderUser>
+            <HeaderUser onClick={toggleModal}>{user.name}</HeaderUser>
             {isModalOpen ? <PopUser isModalOpen={isModalOpen} /> : null}
           </HeaderNav>
         </HeaderBlock>

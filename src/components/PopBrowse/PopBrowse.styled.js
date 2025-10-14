@@ -35,7 +35,7 @@ export const PopBrowseBlock = styled.div`
   display: block;
   margin: 0 auto;
   background-color: #ffffff;
-  max-width: 630px;
+  max-width: 710px;
   width: 100%;
   padding: 40px 30px 38px;
   border-radius: 10px;
@@ -96,9 +96,14 @@ export const CategoriesTheme = styled.div`
   border-radius: 24px;
   margin-right: 7px;
   background-color: ${({ $background }) => $background};
-  opacity: 0.4;
-`;
+ opacity: ${(props) => (props.$isActive ? 1 : 0.4)};
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 
+  &:hover {
+    opacity: 0.7;
+  }
+`;
 export const ActiveCategory = styled.p`
   opacity: 1 !important;
 `;
@@ -344,4 +349,15 @@ export const BtnBgA = styled.p`
 export const Gray = styled.p`
   background: #94a6be;
   color: #ffffff;
+`;
+
+export const White = styled.div`
+  border-radius: 24px;
+  border: 0.7px solid rgba(148, 166, 190, 0.4);
+  padding: 10px 17.5px 10px;
+  margin-right: 7px;
+  margin-bottom: 7px;
+  margin-top:14px;
+  background: #ffffff;
+  color: #94a6be;
 `;

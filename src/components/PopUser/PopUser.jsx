@@ -9,12 +9,16 @@ import {
   PopUserSetTheme,
   PopUserSetThemeP,
 } from "./PopUser.styled";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const PopUser = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <HeaderPopUserSet>
-      <PopUserSetName>Ivan Ivanov</PopUserSetName>
-      <PopUserSetmail>ivan.ivanov@gmail.com</PopUserSetmail>
+      <PopUserSetName>{user.name}</PopUserSetName>
+      <PopUserSetmail>{user.login}</PopUserSetmail>
       <PopUserSetTheme>
         <PopUserSetThemeP>Темная тема</PopUserSetThemeP>
         <Checkbox type="checkbox" name="checkbox" />
