@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import Card from "../Card/Card";
 import CardLoader from "../CardLoader/CardLoader";
 import { Cards, ColumnTitle, MainColumn, PTitle } from "./Column.styled";
-const Column = ({ title, loading, tasks }) => {
+import { TasksContext } from "../../context/TasksContext";
+
+const Column = ({ title }) => {
+  const { tasks, loading } = useContext(TasksContext);
   return (
     <MainColumn>
       <ColumnTitle>
@@ -12,9 +16,9 @@ const Column = ({ title, loading, tasks }) => {
           .filter((card) => card.status === title)
           .map((card) =>
             loading ? (
-              <CardLoader key={card.id} />
+              <CardLoader key={card._id} />
             ) : (
-              <Card card={card} key={card.id} />
+              <Card card={card} key={card._id} />
             )
           )}
       </Cards>

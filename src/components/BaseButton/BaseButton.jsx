@@ -1,11 +1,9 @@
-import { SBaseButton, Link } from "./BaseButton.styled";
+import { SBaseButton } from "./BaseButton.styled";
 
-const BaseButton = ({ text
-   }) => {
+const BaseButton = ({ submit, text, disabled, onClick }) => {
   return (
-    <SBaseButton>
-      <Link>
-        {text}</Link>
+    <SBaseButton type={submit} onClick={onClick} disabled={disabled}>
+      {text}
     </SBaseButton>
   );
 };

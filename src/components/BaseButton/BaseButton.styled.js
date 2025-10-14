@@ -12,6 +12,10 @@ export const SBaseButton = styled.button`
   font-weight: 500;
   &:hover{
     background-color: #33399b;
+  &:disabled{
+    background-color:rgba(148, 166, 190, 1);
+    cursor: not-allowed;
+  }
   @media screen and (max-width: 495px) {
     z-index: 3;
     position: fixed;
@@ -23,8 +27,4 @@ export const SBaseButton = styled.button`
     border-radius: 4px;
   }
   }
-`;
-
-export const Link = styled.a`
-color: #ffffff;
 `;
