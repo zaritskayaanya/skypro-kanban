@@ -5,6 +5,7 @@ import { SContainer } from "../Header/Header.styled";
 import { SMain, MainBlock, MainContent } from "./Main.styled";
 
 const defaultColumnTitles = [
+  "Без статуса",
   "Нужно сделать",
   "В работе",
   "Тестирование",
@@ -15,13 +16,15 @@ const Main = () => {
   const { tasks, loading } = useContext(TasksContext);
 
   const columnTitles = useMemo(() => {
-    if (!tasks || tasks.length === 0) {
-      return defaultColumnTitles;
-    }
+  if (!tasks || tasks.length === 0) {
+    return defaultColumnTitles;
+  }
 
-    const uniqueStatuses = [...new Set(tasks.map((task) => task.status))];
-    return uniqueStatuses || defaultColumnTitles;
-  }, [tasks]);
+  const uniqueStatuses = [...new Set(tasks.map((task) => task.status))];
+  const allStatuses = [...new Set([...defaultColumnTitles, ...uniqueStatuses])];
+  return allStatuses;
+}, [tasks]);
+
 
   return (
     <SMain>
