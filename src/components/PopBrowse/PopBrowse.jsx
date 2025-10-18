@@ -9,6 +9,7 @@ import {
   BtnBor,
   BtnBorA,
   BtnGroup,
+  ErrorPB,
   FormBrowseArea,
   FormBrowseBlock,
   Gray,
@@ -22,12 +23,22 @@ import {
   Status,
   StatusSubttlP,
   StatusTheme,
+  StatusThemeP,
   StatusThemes,
+  Subttl,
   White,
 } from "./PopBrowse.styled";
 import { TasksContext } from "../../context/TasksContext";
 import { AuthContext } from "../../context/AuthContext";
 import { deleteTask, redactTask } from "../../services/api";
+
+const statuses = [
+  "Нужно сделать",
+  "Без статуса",
+  "В работе",
+  "Тестирование",
+  "Готово",
+];
 
 export const PopBrowse = () => {
   const navigate = useNavigate();
@@ -36,8 +47,10 @@ export const PopBrowse = () => {
   const { tasks, setTasks } = useContext(TasksContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [editableTask, setEditableTask] = useState({
-    date: "",
+    date: null,
     description: "",
     status: "",
     title: "",
@@ -63,10 +76,10 @@ export const PopBrowse = () => {
   useEffect(() => {
     if (card) {
       setEditableTask({
-        date: "",
-        description: "",
+        date: card.date || "",
+        description: card.description || "",
         title: "",
-        topic: "",
+        topic: card.topic,
         status: "",
       });
     }
@@ -91,6 +104,11 @@ export const PopBrowse = () => {
     });
   };
 
+  const handleStatusClick = (statusName) => {
+    setSelectedStatus(statusName);
+    setEditableTask({ ...editableTask, status: statusName });
+  };
+
   const saveChanges = async () => {
     setLoading(true);
     try {
@@ -99,20 +117,18 @@ export const PopBrowse = () => {
         _id: card._id,
         task: editableTask,
       });
-       console.log(card);
-      setTasks(updateTasks);
+      setTasks(updateTasks.tasks);
       setIsEditing(false);
-      handleClose();
-      navigate("/");
+      handleClose(true);
     } catch (error) {
-      console.error("Ошибка при сохранении изменений:", error.message);
-    
-      } finally {
+      setError("Ошибка при сохранении изменений:", error.message);
+    } finally {
       setLoading(false);
     }
   };
 
-  const editTask = async () => {
+  const editTask = async (e) => {
+    e.preventDefault();
     setLoading(true);
     try {
       const newTasks = await deleteTask({
@@ -121,9 +137,8 @@ export const PopBrowse = () => {
       });
       setTasks(newTasks);
       handleClose();
-      navigate("/");
     } catch (error) {
-      console.error("Ошибка при удалении задачи:", error.message);
+      setError("Ошибка при удалении задачи:", error.message);
     } finally {
       setLoading(false);
     }
@@ -145,7 +160,6 @@ export const PopBrowse = () => {
             <Card key={card?._id} card={card} open={true} />
             <Status>
               <StatusSubttlP>Статус</StatusSubttlP>
-
               {!isEditing && (
                 <StatusThemes>
                   <StatusTheme>
@@ -155,13 +169,16 @@ export const PopBrowse = () => {
               )}
               {isEditing && (
                 <StatusThemes>
-                  <White>Нужно сделать</White>
-                  <StatusTheme>
-                    <Gray>{card?.status}</Gray>
-                  </StatusTheme>
-                  <White>В работе</White>
-                  <White>Тестирование</White>
-                  <White>Готово</White>
+                  {statuses.map((status, index) => (
+                    <White
+                      key={index}
+                      $isActive={selectedStatus === status}
+                      onClick={() => handleStatusClick(status)}
+                      tasks={tasks.filter((task) => task.status === status)}
+                    >
+                      <StatusThemeP>{status}</StatusThemeP>
+                    </White>
+                  ))}
                 </StatusThemes>
               )}
             </Status>
@@ -171,23 +188,26 @@ export const PopBrowse = () => {
                 onSubmit={(e) => e.preventDefault()}
               >
                 <FormBrowseBlock>
-                  <label htmlFor="description" className="subttl">
-                    Описание задачи
-                  </label>
+                  <Subttl>Описание задачи</Subttl>
                   <FormBrowseArea
                     name="description"
                     id="description"
-                    className="subttl"
                     placeholder="Введите описание задачи..."
-                    value={editableTask.description || card.description}
-										onChange={handleInputChange}
-										readOnly={!isEditing}
-										$isEditing={isEditing}
+                    value={editableTask.description}
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                    $isEditing={isEditing}
                   />
                 </FormBrowseBlock>
               </PopBrowseForm>
-              <Calendar />
+              <Calendar
+                readOnly={!isEditing}
+                isEditing={isEditing}
+                selected={editableTask.date}
+                setSelected={(date) => setEditableTask({ ...tasks, date })}
+              />
             </PopBrowseWrap>
+            <ErrorPB>{error}</ErrorPB>
             <PopBrowseBtnBrowse>
               {!isEditing && (
                 <BtnGroup>
