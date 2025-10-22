@@ -361,3 +361,12 @@ export const White = styled.div`
   background: #ffffff;
   color: #94a6be;
 `;
+
+export const ErrorPB = styled.p`
+  color: #d32f2f;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-top: 8px;
+  margin-bottom: 10px;
+`;
