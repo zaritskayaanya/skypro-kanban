@@ -1,21 +1,24 @@
-import { cardList } from "../../mock/data";
+import { useContext } from "react";
 import Card from "../Card/Card";
 import CardLoader from "../CardLoader/CardLoader";
 import { Cards, ColumnTitle, MainColumn, PTitle } from "./Column.styled";
-const Column = ({ title, loading }) => {
+import { TasksContext } from "../../context/TasksContext";
+
+const Column = ({ title }) => {
+  const { tasks, loading } = useContext(TasksContext);
   return (
     <MainColumn>
       <ColumnTitle>
         <PTitle>{title}</PTitle>
       </ColumnTitle>
       <Cards>
-        {cardList
+        {tasks
           .filter((card) => card.status === title)
           .map((card) =>
             loading ? (
-              <CardLoader key={card.id} />
+              <CardLoader key={card._id} />
             ) : (
-              <Card card={card} key={card.id} />
+              <Card card={card} key={card._id} />
             )
           )}
       </Cards>

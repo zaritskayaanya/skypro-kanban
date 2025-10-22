@@ -55,7 +55,7 @@ const Card = ({ open, card }) => {
         </PopBrowseTopBlock>
       ) : (
         <>
-          <CardsItem id={card?.id}>
+          <CardsItem id={card?._id}>
             <CardsCard>
               <CardGroup>
                 <CardTheme $background={topicStyle.background}>
@@ -63,7 +63,7 @@ const Card = ({ open, card }) => {
                     {card?.topic}
                   </CardThemeP>
                 </CardTheme>
-                <Link to={"/card/" + card?.id}>
+                <Link to={"/card/" + card?._id}>
                   <CardBtn>
                     <CardBtnDiv></CardBtnDiv>
                     <CardBtnDiv></CardBtnDiv>

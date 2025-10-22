@@ -24,4 +24,3 @@ export const MainContent = styled.main`
     display: block;
   }
 `;
-
