@@ -370,3 +370,14 @@ export const ErrorPB = styled.p`
   margin-top: 8px;
   margin-bottom: 10px;
 `;
+
+export const ErrorPB = styled.div`
+  color: ${props => props.$isSuccess ? '#06b16e' : '#ff4444'};
+  font-size: 14px;
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: ${props => props.$isSuccess ? '#f0f9f6' : '#fff5f5'};
+  font-weight: 500;
+  text-align: center;
+`;

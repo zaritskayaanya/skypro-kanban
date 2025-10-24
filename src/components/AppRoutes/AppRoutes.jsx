@@ -1,6 +1,5 @@
 import "../../App.css";
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 import NewCardPage from "../../pages/NewCardPage";
@@ -10,26 +9,28 @@ import CardPage from "../../pages/CardPage";
 import AuthForm from "../AuthForm/AuthForm";
 
 function AppRoutes() {
-  const [isAuth, setIsAuth] = useState(false);
-
   return (
     <Routes>
-      <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage />}>
-          <Route path="/card/add" element={<NewCardPage />} />
-          <Route path="/card/:_id" element={<CardPage />} />
-          <Route path="/exit" element={<ExitPage setIsAuth={setIsAuth} />} />
-        </Route>
+      {/* Защищённые маршруты - доступны только авторизованным пользователям */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/card/add" element={<NewCardPage />} />
+        <Route path="/card/:_id" element={<CardPage />} />
+        <Route path="/exit" element={<ExitPage />} />
       </Route>
+
+      {/* Публичные маршруты - аутентификация */}
       <Route
         path="/sign-in"
-        element={<AuthForm isSignUp={false} setIsAuth={setIsAuth} />}
+        element={<AuthForm isSignUp={false} />}
       />
       <Route
         path="/sign-up"
-        element={<AuthForm isSignUp={true} setIsAuth={setIsAuth} />}
+        element={<AuthForm isSignUp={true} />}
       />
-      <Route path="/*" element={<NotFoundPage />} />
+
+      {/* 404 страница - должна быть в конце */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
