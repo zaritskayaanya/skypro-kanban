@@ -9,6 +9,7 @@ import {
   BtnBor,
   BtnBorA,
   BtnGroup,
+  ErrorPB,
   FormBrowseArea,
   FormBrowseBlock,
   Gray,
@@ -22,12 +23,22 @@ import {
   Status,
   StatusSubttlP,
   StatusTheme,
+  StatusThemeP,
   StatusThemes,
+  Subttl,
   White,
 } from "./PopBrowse.styled";
 import { TasksContext } from "../../context/TasksContext";
 import { AuthContext } from "../../context/AuthContext";
 import { deleteTask, redactTask } from "../../services/api";
+
+const statuses = [
+  "Нужно сделать",
+  "Без статуса",
+  "В работе",
+  "Тестирование",
+  "Готово",
+];
 
 export const PopBrowse = () => {
   const navigate = useNavigate();
@@ -35,9 +46,12 @@ export const PopBrowse = () => {
   const { _id } = useParams();
   const { tasks, setTasks } = useContext(TasksContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [editableTask, setEditableTask] = useState({
-    date: "",
+    date: null,
     description: "",
     status: "",
     title: "",
@@ -61,14 +75,15 @@ export const PopBrowse = () => {
   }, [_id, tasks]);
 
   useEffect(() => {
-    if (card) {
+    if (card && card._id) {
       setEditableTask({
-        date: "",
-        description: "",
-        title: "",
-        topic: "",
-        status: "",
+        date: card.date || "",
+        description: card.description || "",
+        title: card.title || "",
+        topic: card.topic || "",
+        status: card.status || "",
       });
+      setSelectedStatus(card.status || "");
     }
   }, [card]);
 
@@ -80,7 +95,10 @@ export const PopBrowse = () => {
       topic: card.topic,
       status: card.status,
     });
+    setSelectedStatus(card.status);
     setIsEditing(true);
+    setError("");
+    setSuccessMessage("");
   };
 
   const handleInputChange = (e) => {
@@ -89,41 +107,86 @@ export const PopBrowse = () => {
       ...editableTask,
       [name]: value,
     });
+    setError("");
+  };
+
+  const handleStatusClick = (statusName) => {
+    setSelectedStatus(statusName);
+    setEditableTask({ ...editableTask, status: statusName });
   };
 
   const saveChanges = async () => {
+    // Валидация
+    if (!editableTask.title.trim()) {
+      setError("Название задачи не может быть пустым");
+      return;
+    }
+    if (!editableTask.description.trim()) {
+      setError("Описание задачи не может быть пустым");
+      return;
+    }
+    if (!editableTask.status) {
+      setError("Пожалуйста, выберите статус");
+      return;
+    }
+
     setLoading(true);
+    setError("");
+    setSuccessMessage("");
+
     try {
       const updateTasks = await redactTask({
         token: user.token,
         _id: card._id,
         task: editableTask,
       });
-       console.log(card);
       setTasks(updateTasks);
+      setSuccessMessage("Задача успешно обновлена!");
       setIsEditing(false);
-      handleClose();
-      navigate("/");
+
+      // Закрываем через 1 секунду
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
     } catch (error) {
-      console.error("Ошибка при сохранении изменений:", error.message);
-    
-      } finally {
+      console.error("Ошибка при сохранении изменений:", error);
+      setError(
+        error.message || "Ошибка при сохранении изменений. Попробуйте снова."
+      );
+    } finally {
       setLoading(false);
     }
   };
 
-  const editTask = async () => {
+  const handleDeleteTask = async (e) => {
+    e.preventDefault();
+
+    // Подтверждение удаления
+    if (!window.confirm("Вы уверены, что хотите удалить эту задачу?")) {
+      return;
+    }
+
     setLoading(true);
+    setError("");
+    setSuccessMessage("");
+
     try {
       const newTasks = await deleteTask({
         token: user.token,
         _id: card._id,
       });
       setTasks(newTasks);
-      handleClose();
-      navigate("/");
+      setSuccessMessage("Задача успешно удалена!");
+
+      // Закрываем через 1 секунду
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
     } catch (error) {
-      console.error("Ошибка при удалении задачи:", error.message);
+      console.error("Ошибка при удалении задачи:", error);
+      setError(
+        error.message || "Ошибка при удалении задачи. Попробуйте снова."
+      );
     } finally {
       setLoading(false);
     }
@@ -131,6 +194,8 @@ export const PopBrowse = () => {
 
   const editChange = () => {
     setIsEditing(false);
+    setError("");
+    setSuccessMessage("");
   };
 
   const handleClose = () => {
@@ -145,7 +210,6 @@ export const PopBrowse = () => {
             <Card key={card?._id} card={card} open={true} />
             <Status>
               <StatusSubttlP>Статус</StatusSubttlP>
-
               {!isEditing && (
                 <StatusThemes>
                   <StatusTheme>
@@ -155,13 +219,15 @@ export const PopBrowse = () => {
               )}
               {isEditing && (
                 <StatusThemes>
-                  <White>Нужно сделать</White>
-                  <StatusTheme>
-                    <Gray>{card?.status}</Gray>
-                  </StatusTheme>
-                  <White>В работе</White>
-                  <White>Тестирование</White>
-                  <White>Готово</White>
+                  {statuses.map((status, index) => (
+                    <White
+                      key={index}
+                      $isActive={selectedStatus === status}
+                      onClick={() => handleStatusClick(status)}
+                    >
+                      <StatusThemeP>{status}</StatusThemeP>
+                    </White>
+                  ))}
                 </StatusThemes>
               )}
             </Status>
@@ -171,23 +237,30 @@ export const PopBrowse = () => {
                 onSubmit={(e) => e.preventDefault()}
               >
                 <FormBrowseBlock>
-                  <label htmlFor="description" className="subttl">
-                    Описание задачи
-                  </label>
+                  <Subttl>Описание задачи</Subttl>
                   <FormBrowseArea
                     name="description"
                     id="description"
-                    className="subttl"
                     placeholder="Введите описание задачи..."
-                    value={editableTask.description || card.description}
-										onChange={handleInputChange}
-										readOnly={!isEditing}
-										$isEditing={isEditing}
+                    value={editableTask.description}
+                    onChange={handleInputChange}
+                    readOnly={!isEditing}
+                    $isEditing={isEditing}
                   />
                 </FormBrowseBlock>
               </PopBrowseForm>
-              <Calendar />
+              <Calendar
+                readOnly={!isEditing}
+                isEditing={isEditing}
+                selected={editableTask.date}
+                setSelected={(date) =>
+                  setEditableTask({ ...editableTask, date })
+                }
+              />
             </PopBrowseWrap>
+            {error && <ErrorPB $isError={true}>{error}</ErrorPB>}
+            {successMessage && <ErrorPB $isSuccess={true}>{successMessage}</ErrorPB>}
+
             <PopBrowseBtnBrowse>
               {!isEditing && (
                 <BtnGroup>
@@ -197,20 +270,28 @@ export const PopBrowse = () => {
                     </BtnBorA>
                   </BtnBor>
                   <BtnBor>
-                    <BtnBorA onClick={editTask}>Удалить задачу</BtnBorA>
+                    <BtnBorA onClick={handleDeleteTask} disabled={loading}>
+                      Удалить задачу
+                    </BtnBorA>
                   </BtnBor>
                 </BtnGroup>
               )}
               {isEditing && (
                 <BtnGroup>
-                  <BtnBor onClick={saveChanges}>
-                    <BtnBorA>Сохранить</BtnBorA>
+                  <BtnBor>
+                    <BtnBorA onClick={saveChanges} disabled={loading}>
+                      {loading ? "Сохранение..." : "Сохранить"}
+                    </BtnBorA>
                   </BtnBor>
                   <BtnBor>
-                    <BtnBorA onClick={editChange}>Отменить</BtnBorA>
+                    <BtnBorA onClick={editChange} disabled={loading}>
+                      Отменить
+                    </BtnBorA>
                   </BtnBor>
                   <BtnBor>
-                    <BtnBorA onClick={editTask}>Удалить задачу</BtnBorA>
+                    <BtnBorA onClick={handleDeleteTask} disabled={loading}>
+                      Удалить задачу
+                    </BtnBorA>
                   </BtnBor>
                 </BtnGroup>
               )}
@@ -224,4 +305,5 @@ export const PopBrowse = () => {
     </SPopBrowse>
   );
 };
+
 export default PopBrowse;
