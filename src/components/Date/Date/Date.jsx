@@ -1,7 +1,16 @@
+import { useContext } from "react";
 import { CardDate, CardDateP, CardDateSvg } from "./date.styles";
-
+import { TasksContext } from "../../../context/TasksContext";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const Date = () => {
+  const { tasks } = useContext(TasksContext);
+  const formatDate = tasks.date
+    ? format(tasks.date, "dd.MM.yy", { locale: ru })
+    : "Дата не указана";
+
+  console.log(tasks.date);
   return (
     <CardDate>
       <CardDateSvg
@@ -32,7 +41,7 @@ const Date = () => {
           </clipPath>
         </defs>
       </CardDateSvg>
-      <CardDateP>30.10.23</CardDateP>
+      <CardDateP>{formatDate()}</CardDateP>
     </CardDate>
   );
 };

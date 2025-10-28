@@ -11,17 +11,19 @@ import {
   PopExitTtl,
   SPopExit,
 } from "./PopExit.styled";
-const PopExit = ({ setIsAuth }) => {
+import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
+const PopExit = () => {
+  const {logout} = useContext(AuthContext)
   const navigate = useNavigate();
 
   function handleLogout(e) {
     e.preventDefault();
-    setIsAuth(false);
+    logout()
     navigate("/sign-in");
   }
   function handleLogState(e) {
     e.preventDefault();
-    setIsAuth(true);
     navigate("/");
   }
   return (

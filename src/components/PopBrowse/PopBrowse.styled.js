@@ -35,7 +35,7 @@ export const PopBrowseBlock = styled.div`
   display: block;
   margin: 0 auto;
   background-color: #ffffff;
-  max-width: 710px;
+  max-width: 650px;
   width: 100%;
   padding: 40px 30px 38px;
   border-radius: 10px;
@@ -96,7 +96,7 @@ export const CategoriesTheme = styled.div`
   border-radius: 24px;
   margin-right: 7px;
   background-color: ${({ $background }) => $background};
- opacity: ${(props) => (props.$isActive ? 1 : 0.4)};
+  opacity: ${(props) => (props.$isActive ? 1 : 0.4)};
   cursor: pointer;
   transition: opacity 0.3s ease;
 
@@ -358,6 +358,16 @@ export const White = styled.div`
   margin-right: 7px;
   margin-bottom: 7px;
   margin-top:14px;
-  background: #ffffff;
-  color: #94a6be;
+  cursor: pointer;
+  color: ${(props) => (props.$isActive ? "#ffffff" : "#94a6be")};
+  background: ${(props) => (props.$isActive ? "#94a6be" : "#ffffff")};
 `;
+
+export const ErrorPB = styled.p`
+font-weight: 600;
+  font-size: 14px;
+  color: rgba(248, 77, 77, 1);
+  letter-spacing: -1%;
+  text-align: left;
+  margin-bottom: 10px ;
+`

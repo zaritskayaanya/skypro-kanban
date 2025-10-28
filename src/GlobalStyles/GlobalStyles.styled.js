@@ -35,6 +35,10 @@ body {
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   color: #000000;
 }
-`;
+
+textarea {
+font-family: inherit;
+}
+`;  
 
 export default GlobalStyle;

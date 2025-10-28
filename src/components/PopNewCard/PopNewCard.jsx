@@ -6,7 +6,9 @@ import {
   CategoriesTheme,
   CategoriesThemeP,
   CategoriesThemes,
+  ErrorPB,
   PopBrowseContainer,
+  Subttl,
 } from "../PopBrowse/PopBrowse.styled";
 import {
   FormNewArea,
@@ -35,7 +37,7 @@ const categories = [
 const PopNewCard = () => {
   const { tasks, setTasks } = useContext(TasksContext);
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -43,13 +45,17 @@ const PopNewCard = () => {
     title: "",
     description: "",
     topic: "Research",
+    status: "Без статуса",
+    date: null,
   });
 
   // состояние ошибок
   const [errors, setErrors] = useState({
     title: "",
     description: "",
+    status: "",
     topic: "",
+    date: "",
   });
 
   const handleChange = (e) => {
@@ -59,6 +65,7 @@ const PopNewCard = () => {
       [name]: value,
     });
     setErrors({ ...errors, [name]: false });
+    setError("");
   };
 
   const addNewTask = async (e) => {
@@ -67,11 +74,11 @@ const PopNewCard = () => {
     try {
       const newTasks = await postTask({ token: user?.token, task: formData });
       setTasks(newTasks);
+      handleClose(true);
     } catch (error) {
-      console.error("Ошибка добавления задачи", error.message);
+      setError("Ошибка добавления задачи", error.message);
     } finally {
       setLoading(false);
-      handleClose(true);
     }
   };
 
@@ -94,9 +101,7 @@ const PopNewCard = () => {
             <PopNewCardWrap>
               <PopNewCardForm onSubmit={addNewTask}>
                 <FormNewBlock>
-                  <label htmlFor="formTitle" className="subttl">
-                    Название задачи
-                  </label>
+                  <Subttl>Название задачи</Subttl>
                   <FormNewInput
                     type="text"
                     name="title"
@@ -107,14 +112,11 @@ const PopNewCard = () => {
                     autoFocus
                   />
                 </FormNewBlock>
-                <FormNewBlock>
-                  <label htmlFor="textArea" className="subttl">
-                    Описание задачи
-                  </label>
+                <FormNewBlock onSubmit={(e) => e.preventDefault()}>
+                  <Subttl>Описание задачи</Subttl>
                   <FormNewArea
                     type="text"
                     name="description"
-                    className="subttl"
                     id="textArea"
                     placeholder="Введите описание задачи..."
                     value={formData.text}
@@ -122,8 +124,12 @@ const PopNewCard = () => {
                   ></FormNewArea>
                 </FormNewBlock>
               </PopNewCardForm>
-              <Calendar />
+              <Calendar
+                selected={formData.date}
+                setSelected={(date) => setFormData({ ...formData, date })}
+              />
             </PopNewCardWrap>
+            <ErrorPB>{error}</ErrorPB>
             <Categories>
               <CategoriesPSubttl>Категория</CategoriesPSubttl>
               <CategoriesThemes>
