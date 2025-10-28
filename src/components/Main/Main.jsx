@@ -5,8 +5,8 @@ import { SContainer } from "../Header/Header.styled";
 import { SMain, MainBlock, MainContent } from "./Main.styled";
 
 const defaultColumnTitles = [
-  "Без статуса",
   "Нужно сделать",
+  "Без статуса",
   "В работе",
   "Тестирование",
   "Готово",

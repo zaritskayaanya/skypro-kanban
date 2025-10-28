@@ -186,17 +186,3 @@ export const FormNewCreate = styled.button`
     height: 40px;
   }
 `;
-export const ErrorMessage = styled.div`
-  color: #ff4444;
-  font-size: 12px;
-  margin-top: 5px;
-  font-weight: 500;
-`;
-
-export const SuccessMessage = styled.div`
-  color: #06b16e;
-  font-size: 14px;
-  margin-top: 10px;
-  font-weight: 500;
-  text-align: center;
-`;

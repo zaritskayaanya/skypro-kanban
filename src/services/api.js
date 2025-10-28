@@ -41,7 +41,7 @@ export async function redactTask({ token, _id, task }) {
                 'Content-Type': '',
             },
         })
-        return data.data.tasks
+        return data.data
     } catch (error) {
         throw new Error(error.message)
     }
@@ -49,9 +49,9 @@ export async function redactTask({ token, _id, task }) {
 
 // Функция удаления задачи:
 
-export async function deleteTask({ token, _id, task }) {
+export async function deleteTask({ token, _id }) {
     try {
-        const data = await axios.delete(API_URL + _id, task,  {
+        const data = await axios.delete(API_URL + _id,  {
             headers: {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': '',

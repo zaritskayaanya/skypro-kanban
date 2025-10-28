@@ -6,7 +6,9 @@ import {
   CategoriesTheme,
   CategoriesThemeP,
   CategoriesThemes,
+  ErrorPB,
   PopBrowseContainer,
+  Subttl,
 } from "../PopBrowse/PopBrowse.styled";
 import {
   FormNewArea,
@@ -20,8 +22,6 @@ import {
   PopNewCardTtl,
   PopNewCardWrap,
   SPopNewCard,
-  ErrorMessage,
-  SuccessMessage,
 } from "./PopNewCard.styled";
 import { postTask } from "../../services/api";
 import { useContext, useState } from "react";
@@ -37,50 +37,26 @@ const categories = [
 const PopNewCard = () => {
   const { tasks, setTasks } = useContext(TasksContext);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("Research");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     topic: "Research",
+    status: "Без статуса",
+    date: null,
   });
 
+  // состояние ошибок
   const [errors, setErrors] = useState({
     title: "",
     description: "",
+    status: "",
     topic: "",
+    date: "",
   });
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // Валидация формы
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.title.trim()) {
-      newErrors.title = "Название задачи не может быть пустым";
-    } else if (formData.title.trim().length < 3) {
-      newErrors.title = "Название должно содержать минимум 3 символа";
-    } else if (formData.title.trim().length > 100) {
-      newErrors.title = "Название не должно превышать 100 символов";
-    }
-
-    if (!formData.description.trim()) {
-      newErrors.description = "Описание задачи не может быть пустым";
-    } else if (formData.description.trim().length < 5) {
-      newErrors.description = "Описание должно содержать минимум 5 символов";
-    } else if (formData.description.trim().length > 500) {
-      newErrors.description = "Описание не должно превышать 500 символов";
-    }
-
-    if (!formData.topic) {
-      newErrors.topic = "Пожалуйста, выберите категорию";
-    }
-
-    return newErrors;
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,42 +64,19 @@ const PopNewCard = () => {
       ...formData,
       [name]: value,
     });
-    // Очищаем ошибку для этого поля при изменении
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: "" });
-    }
-    setErrorMessage("");
+    setErrors({ ...errors, [name]: false });
+    setError("");
   };
 
   const addNewTask = async (e) => {
     e.preventDefault();
-    
-    // Валидируем форму
-    const newErrors = validateForm();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setErrorMessage("Пожалуйста, заполните все поля корректно");
-      return;
-    }
-
     setLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
-
     try {
       const newTasks = await postTask({ token: user?.token, task: formData });
       setTasks(newTasks);
-      setSuccessMessage("Задача успешно создана!");
-      
-      // Закрываем модальное окно через 1 секунду
-      setTimeout(() => {
-        handleClose();
-      }, 1000);
+      handleClose(true);
     } catch (error) {
-      console.error("Ошибка добавления задачи", error.message);
-      setErrorMessage(
-        error.message || "Ошибка при создании задачи. Попробуйте снова."
-      );
+      setError("Ошибка добавления задачи", error.message);
     } finally {
       setLoading(false);
     }
@@ -132,9 +85,6 @@ const PopNewCard = () => {
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
     setFormData({ ...formData, topic: categoryName });
-    if (errors.topic) {
-      setErrors({ ...errors, topic: "" });
-    }
   };
 
   const handleClose = () => {
@@ -151,42 +101,35 @@ const PopNewCard = () => {
             <PopNewCardWrap>
               <PopNewCardForm onSubmit={addNewTask}>
                 <FormNewBlock>
-                  <label htmlFor="formTitle" className="subttl">
-                    Название задачи
-                  </label>
+                  <Subttl>Название задачи</Subttl>
                   <FormNewInput
                     type="text"
                     name="title"
                     id="formTitle"
                     placeholder="Введите название задачи..."
-                    value={formData.title}
+                    value={formData.name}
                     onChange={handleChange}
                     autoFocus
-                    $hasError={!!errors.title}
                   />
-                  {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
                 </FormNewBlock>
-                <FormNewBlock>
-                  <label htmlFor="textArea" className="subttl">
-                    Описание задачи
-                  </label>
+                <FormNewBlock onSubmit={(e) => e.preventDefault()}>
+                  <Subttl>Описание задачи</Subttl>
                   <FormNewArea
                     type="text"
                     name="description"
-                    className="subttl"
                     id="textArea"
                     placeholder="Введите описание задачи..."
-                    value={formData.description}
+                    value={formData.text}
                     onChange={handleChange}
-                    $hasError={!!errors.description}
-                  />
-                  {errors.description && (
-                    <ErrorMessage>{errors.description}</ErrorMessage>
-                  )}
+                  ></FormNewArea>
                 </FormNewBlock>
               </PopNewCardForm>
-              <Calendar />
+              <Calendar
+                selected={formData.date}
+                setSelected={(date) => setFormData({ ...formData, date })}
+              />
             </PopNewCardWrap>
+            <ErrorPB>{error}</ErrorPB>
             <Categories>
               <CategoriesPSubttl>Категория</CategoriesPSubttl>
               <CategoriesThemes>
@@ -203,15 +146,8 @@ const PopNewCard = () => {
                   </CategoriesTheme>
                 ))}
               </CategoriesThemes>
-              {errors.topic && <ErrorMessage>{errors.topic}</ErrorMessage>}
             </Categories>
-
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
-
-            <FormNewCreate onClick={addNewTask} disabled={loading}>
-              {loading ? "Создание..." : "Создать задачу"}
-            </FormNewCreate>
+            <FormNewCreate onClick={addNewTask}>Создать задачу</FormNewCreate>
           </PopNewCardContent>
         </PopNewCardBlock>
       </PopBrowseContainer>

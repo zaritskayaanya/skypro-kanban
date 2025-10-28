@@ -11,29 +11,19 @@ export const TasksProvider = ({ children }) => {
 
   useEffect(() => {
     const loadTasks = async () => {
-      // Если пользователь не авторизован, не загружаем задачи
-      if (!user || !user.token) {
-        setLoading(false);
-        setTasks([]);
-        return;
-      }
-
       setLoading(true);
-      setError("");
       try {
         const data = await fetchTasks({ token: user.token });
-        setTasks(data || []);
+        setTasks(data);
       } catch (error) {
+        setError(error.message);
         console.error("Ошибка загрузки задач", error.message);
-        setError(error.message || "Ошибка при загрузке задач");
-        setTasks([]);
       } finally {
         setLoading(false);
       }
     };
-
     loadTasks();
-  }, [user?.token]);
+  }, [user.token]);
 
   return (
     <TasksContext.Provider value={{ tasks, setTasks, loading, error }}>

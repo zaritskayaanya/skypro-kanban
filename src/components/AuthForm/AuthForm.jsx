@@ -146,6 +146,7 @@ const AuthForm = ({ isSignUp }) => {
             <BaseButton
               onClick={handleSubmit}
               type="submit"
+              disabled={error}
               text={isSignUp ? "Зарегистрироваться" : "Войти"}
             />
             {!isSignUp && (
